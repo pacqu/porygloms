@@ -5,16 +5,43 @@ import math
 MAX_STEPS = 100
 
 def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
-    pass
+    add_point(points, x0, y0, z0)
+    add_point(points, x1, y1, z1)
+    add_point(points, x2, y2, z2)
 
-def draw_polygons( points, screen, color ):
-    pass
+def draw_polygons( point, screen, color ):
+    i = 0
+    while i < len(point) :
+        draw_line(screen, point[i][0],point[i][1], point[i+1][0], point[i+1][1], color)
+        draw_line(screen, point[i+1][0],point[i+1][1], point[i+2][0], point[i+2][1], color)
+        draw_line(screen, point[i+2][0],point[i+2][1], point[i][0], point[i][1], color)
+        i += 3
 
 def add_box( points, x, y, z, width, height, depth ):
     x1 = x + width
     y1 = y - height
     z1 = z - depth
 
+    #faces
+    #front
+    add_polygon(points, x, y, z, x, y1, z, x1, y1, z )
+    add_polygon(points, x, y, z, x1, y1, z, x1, y, z )
+    #back
+    add_polygon(points, x1, y, z1, x1, y1, z1, x, y1, z1)
+    add_polygon(points, x1, y, z1, x, y1, z1, x, y, z1)
+    #left
+    add_polygon(points, x, y, z1, x, y1, z1, x, y1, z)
+    add_polygon(points, x, y, z1, x, y1, z, x, y, z )
+    #right
+    add_polygon(points, x1, y, z, x1, y1, z, x1, y1, z1)
+    add_polygon(points, x1, y, z, x1, y1, z1, x1, y, z1)
+    #top
+    add_polygon(points, x, y, z1, x, y, z, x1, y, z)
+    add_polygon(points, x, y, z1, x1, y, z, x1, y, z1)
+    #bottom
+    add_polygon(points, x, y1, z1, x, y1, z, x1, y1, z)
+    add_polygon(points, x, y1, z1, x1, y1, z, x1, y1, z1)
+    '''
     add_edge( points, 
               x, y, z, 
               x, y, z )
@@ -39,7 +66,8 @@ def add_box( points, x, y, z, width, height, depth ):
     add_edge( points, 
               x1, y1, z1, 
               x1, y1, z1 )
-
+    '''
+    
 def add_sphere( points, cx, cy, cz, r, step ):
     
     num_steps = MAX_STEPS / step
