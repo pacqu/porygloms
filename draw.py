@@ -123,7 +123,31 @@ def add_torus( points, cx, cy, cz, r0, r1, step ):
         while longt < longt_stop:
             
             index = lat * num_steps + longt
-            add_edge( points, temp[index][0], temp[index][1], temp[index][2], temp[index][0], temp[index][1], temp[index][2] )
+
+            if index == len(temp):
+                break
+            #first triangles
+            p0 = index
+            p1 = (index + 1) % len(temp)
+            p2 = (index + num_steps + 1) % len(temp)
+            '''
+            print len(temp)
+            print "index: " + str(index)
+            print "##############"
+            '''
+            add_polygon(points, temp[p0][0],temp[p0][1], temp[p0][2],
+                        temp[p1][0], temp[p1][1],temp[p1][2],
+                        temp[p2][0], temp[p2][1],temp[p2][2])
+            
+            #second triangles
+            p0 = index
+            p1 = (index + num_steps + 1) % len(temp)
+            p2 = (index + num_steps) % len(temp)
+            add_polygon(points, temp[p0][0],temp[p0][1], temp[p0][2],
+                        temp[p1][0], temp[p1][1],temp[p1][2],
+                        temp[p2][0], temp[p2][1],temp[p2][2])
+            
+            #add_edge( points, temp[index][0], temp[index][1], temp[index][2], temp[index][0], temp[index][1], temp[index][2] )
             
             longt+= 1
         lat+= 1
