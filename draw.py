@@ -39,34 +39,9 @@ def add_box( points, x, y, z, width, height, depth ):
     add_polygon(points, x, y, z1, x, y, z, x1, y, z)
     add_polygon(points, x, y, z1, x1, y, z, x1, y, z1)
     #bottom
-    add_polygon(points, x, y1, z1, x, y1, z, x1, y1, z)
-    add_polygon(points, x, y1, z1, x1, y1, z, x1, y1, z1)
-    '''
-    add_edge( points, 
-              x, y, z, 
-              x, y, z )
-    add_edge( points, 
-              x, y1, z, 
-              x, y1, z )
-    add_edge( points, 
-              x1, y, z, 
-              x1, y, z )
-    add_edge( points, 
-              x1, y1, z, 
-              x1, y1, z )
-    add_edge( points, 
-              x, y, z1, 
-              x, y, z1 )
-    add_edge( points, 
-              x, y1, z1, 
-              x, y1, z1 )
-    add_edge( points, 
-              x1, y, z1, 
-              x1, y, z1 )
-    add_edge( points, 
-              x1, y1, z1, 
-              x1, y1, z1 )
-    '''
+    add_polygon(points, x, y1, z, x1, y1, z, x1, y1, z1)
+    add_polygon(points, x, y1, z, x1, y1, z1, x, y1, z1)
+    
     
 def add_sphere( points, cx, cy, cz, r, step ):
     
@@ -83,10 +58,29 @@ def add_sphere( points, cx, cy, cz, r, step ):
     while lat < lat_stop:
         longt = 0
         while longt < longt_stop:
+            index = lat * num_steps + longt
+            if index == len(temp):
+                break
+            #first triangles
+            p0 = index
+            p1 = (index + 1) % len(temp)
+            p2 = (index + num_steps + 1) % len(temp)
+            '''
+            print len(temp)
+            print "index: " + str(index)
+            print "##############"
+            '''
+            add_polygon(points, temp[p0][0],temp[p0][1], temp[p0][2],
+                        temp[p1][0], temp[p1][1],temp[p1][2],
+                        temp[p2][0], temp[p2][1],temp[p2][2])
             
-            index = lat * num_steps + longt            
-            add_edge( points, temp[index][0], temp[index][1], temp[index][2], temp[index][0], temp[index][1], temp[index][2] )
-            
+            #second triangles
+            p0 = index
+            p1 = (index + num_steps + 1) % len(temp)
+            p2 = (index + num_steps) % len(temp)
+            add_polygon(points, temp[p0][0],temp[p0][1], temp[p0][2],
+                        temp[p1][0], temp[p1][1],temp[p1][2],
+                        temp[p2][0], temp[p2][1],temp[p2][2])
             longt+= 1
         lat+= 1
 
