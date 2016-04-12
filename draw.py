@@ -12,9 +12,27 @@ def add_polygon( points, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
 def draw_polygons( point, screen, color ):
     i = 0
     while i < len(point) :
-        draw_line(screen, point[i][0],point[i][1], point[i+1][0], point[i+1][1], color)
-        draw_line(screen, point[i+1][0],point[i+1][1], point[i+2][0], point[i+2][1], color)
-        draw_line(screen, point[i+2][0],point[i+2][1], point[i][0], point[i][1], color)
+        x0 = point[i][0]
+        y0 = point[i][1]
+        z0 = point[i][2]
+
+        x1 = point[i+1][0]
+        y1 = point[i+1][1]
+        z1 = point[i+1][2]
+
+        x2 = point[i+2][0]
+        y2 = point[i+2][1]
+        z2 = point[i+2][2]
+
+        A = [x1 - x0, y1 - y0, z1 - z0]
+        B = [x2 - x0, y2 - y0, z2 - z0]
+        N = [A[1]*B[2] - A[2]*B[1], A[2]*B[0] - A[0]*B[2], A[0]*B[1] - A[1]*B[0]]
+        V = [0, 0, -1]
+        NxV = N[0]*V[0] + N[1]*V[1] + N[2]*V[2]
+        if NxV < 0:
+            draw_line(screen, point[i][0],point[i][1], point[i+1][0], point[i+1][1], color)
+            draw_line(screen, point[i+1][0],point[i+1][1], point[i+2][0], point[i+2][1], color)
+            draw_line(screen, point[i+2][0],point[i+2][1], point[i][0], point[i][1], color)
         i += 3
 
 def add_box( points, x, y, z, width, height, depth ):
@@ -58,7 +76,9 @@ def add_sphere( points, cx, cy, cz, r, step ):
     while lat < lat_stop:
         longt = 0
         while longt < longt_stop:
+            
             index = lat * num_steps + longt
+
             if index == len(temp):
                 break
             #first triangles
